@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= content_for(:title) || "Chat" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= yield :head %>
+
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon.png" type="image/png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body class="container mx-auto">
+<!-- component -->
+<header class="header flex items-center justify-between px-8 py-2 border-b mb-4">
+  <!-- logo -->
+  <h1 class="w-3/12">
+    <%= link_to root_path do %>
+      <%= image_tag "https://github.com/mixandgo/prorb_action_cable_chat/blob/main/app/assets/images/logo.png?raw=true", size: "48x48" %>
+    <% end %>
+  </h1>
+
+  <!-- navigation -->
+  <nav class="nav">
+    <%= link_to 'English', root_path(locale: 'en')%>
+    <%= link_to 'Portuguese', root_path(locale: 'pt-BR')%>
+    <ul class="flex items-center">
+      <% if signed_in? %>
+        <li class="p-4 text-slate-300">
+          <%= current_user.email %>
+        </li>
+        <li class="p-4 cursor-pointer">
+          <%= button_to t('.logout'), destroy_user_session_path, class: "button", method: :delete %>
+        </li>
+      <% else %>
+        <li class="p-4 cursor-pointer">
+          <%= link_to t('.login'), new_user_session_path, class: "button" %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+</header>
+<% if notice %>
+  <p class="notice"><%= notice %></p>
+<% elsif alert %>
+  <p class="alert"><%= alert %></p>
+<% end %>
+<div class="h-screen"><%= yield %></div>
+</body>
+</html>
